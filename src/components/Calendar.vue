@@ -116,7 +116,19 @@
                 text
                 color="secondary"
                 @click="selectedOpen = false">
-                Cancel
+                Close
+              </v-btn>
+              <v-btn
+                text
+                v-if="currentlyEditing !== selectedEvent.id"
+                @click.prevent="editEvent(selectedEvent)">
+                Edit
+              </v-btn>
+              <v-btn
+                text
+                v-else
+                @click.prevent="updateEvent(selectedEvent)">
+                Save
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -140,7 +152,8 @@ export default {
       day: 'Day',
       '4day': '4 Days'
     },
-    name: null,
+    colors: ['#2196F3', '#3F51B5', '#673AB7', '#00BCD4', '#4CAF50', '#FF9800', '#757575'],
+    names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
     details: null,
     start: null,
     end: null,
@@ -168,6 +181,14 @@ export default {
 
       this.events = events;
     },
+    async updateEvent() {
+      await db.collection('calEvent').doc(this.currentlyEditing).update({
+        details: this.selectedEvent.details
+      });
+
+      this.selectedOpen = false;
+      this.currentlyEditing = null;
+    },
     viewDay({ date }) {
       this.focus = date
       this.type = 'day'
@@ -183,6 +204,9 @@ export default {
     },
     next() {
       this.$refs.calendar.next()
+    },
+    editEvent(event) {
+      this.currentlyEditing = event.id;
     },
     showEvent({ nativeEvent, event }) {
       const open = () => {
