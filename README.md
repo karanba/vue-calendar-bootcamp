@@ -1,5 +1,10 @@
 # vue-calendar
 
+## Demo
+
+[karanba-vue-calendar-bootcamp.surge.sh](https://karanba-vue-calendar-bootcamp.surge.sh)
+
+
 ## Project setup
 ```
 npm install
